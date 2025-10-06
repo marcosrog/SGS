@@ -1,0 +1,39 @@
+CREATE TABLE IF NOT EXISTS `quadras` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`quadra` VARCHAR(20) NOT NULL COLLATE 'latin1_bin',
+	`obs` VARCHAR(2000) NOT NULL COLLATE 'latin1_bin',
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `Index_2` (`quadra`) USING BTREE
+)
+COLLATE='latin1_bin'
+ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `sepulturas` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`quadra` BIGINT UNSIGNED NOT NULL,
+	`sepultura` VARCHAR(20) NOT NULL COLLATE 'latin1_bin',
+	`contribuinte` VARCHAR(100) NOT NULL COLLATE 'latin1_bin',
+	`cpf` VARCHAR(14) NOT NULL COLLATE 'latin1_bin',
+	`obs` VARCHAR(2000) NOT NULL COLLATE 'latin1_bin',
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `Index_2` (`quadra`, `sepultura`) USING BTREE,
+	CONSTRAINT `FK_sepulturas_1` FOREIGN KEY (`quadra`) REFERENCES `quadras` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='latin1_bin'
+ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `falecidos` (
+	`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`nome` VARCHAR(100) NOT NULL DEFAULT '' COLLATE 'latin1_bin',
+	`cpf` VARCHAR(14) NOT NULL COLLATE 'latin1_bin',
+	`pai` VARCHAR(100) NOT NULL COLLATE 'latin1_bin',
+	`mae` VARCHAR(100) NOT NULL COLLATE 'latin1_bin',
+	`sepultura` BIGINT UNSIGNED NOT NULL,
+	`data` DATE NULL DEFAULT NULL,
+	`obs` VARCHAR(2000) NOT NULL COLLATE 'latin1_bin',
+	PRIMARY KEY (`id`, `nome`, `sepultura`) USING BTREE,
+	INDEX `FK_falecidos_1` (`sepultura`) USING BTREE,
+	CONSTRAINT `FK_falecidos_1` FOREIGN KEY (`sepultura`) REFERENCES `sepulturas` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+COLLATE='latin1_bin'
+ENGINE=InnoDB;
